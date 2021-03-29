@@ -1,11 +1,18 @@
 package com.codemasters.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import java.time.LocalDateTime;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Game {
@@ -15,20 +22,38 @@ public class Game {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    private Date dateOfCreate;
+    private LocalDateTime dateOfCreate;
+
+    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    Set<GamePlayer> gamePlayers = new HashSet<>();
 
     public Game() {
     }
 
-    public Game(Date dateOfCreate) {
+    public Game(LocalDateTime dateOfCreate) {
         this.dateOfCreate = dateOfCreate;
     }
 
-    public Date getDateOfCreate() {
+    public List<Player> getPlayers() {
+        return gamePlayers.stream().map(GamePlayer::getPlayer).collect(toList());
+    }
+
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
+    public LocalDateTime getDateOfCreate() {
         return dateOfCreate;
     }
 
-    public void setDateOfCreate(Date dateOfCreate) {
-        this.dateOfCreate = dateOfCreate;
+    public long getId() {
+        return id;
     }
+
+
+    public void addGamePlayer(GamePlayer player){
+        player.setGame(this);
+        gamePlayers.add(player);
+    }
+
 }

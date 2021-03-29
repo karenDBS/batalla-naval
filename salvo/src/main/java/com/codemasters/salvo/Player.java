@@ -5,7 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Player {
@@ -17,12 +22,22 @@ public class Player {
 
     private String userName;
 
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
+    private Set<GamePlayer> gamePlayers = new HashSet<>();
 
     public Player() {
     }
 
     public Player(String userName) {
         this.userName = userName;
+    }
+
+    public List<Game> getGames() {
+        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
+    }
+
+    public void setGames(Set<GamePlayer> games) {
+        this.gamePlayers = games;
     }
 
     public String getUserName() {
@@ -32,4 +47,22 @@ public class Player {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
+    public void addGamePlayer(GamePlayer game){
+        game.setPlayer(this);
+        gamePlayers.add(game);
+    }
+
 }
