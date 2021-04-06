@@ -1,16 +1,11 @@
 package com.codemasters.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class GamePlayer {
@@ -20,6 +15,8 @@ public class GamePlayer {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
+    private LocalDateTime creation;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="game_id")
     private Game game;
@@ -28,10 +25,14 @@ public class GamePlayer {
     @JoinColumn(name="player_id")
     private Player player;
 
+    @OneToMany(mappedBy="gamePlayers", fetch=FetchType.EAGER)
+    Set<Ship> ships = new HashSet<>();
+
     public GamePlayer() {
     }
 
-    public GamePlayer(Game game, Player player) {
+    public GamePlayer(LocalDateTime creation, Game game, Player player) {
+        this.creation = creation;
         this.game = game;
         this.player = player;
     }
@@ -58,6 +59,27 @@ public class GamePlayer {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public LocalDateTime getCreation() {
+        return creation;
+    }
+
+    public void setCreation(LocalDateTime creation) {
+        this.creation = creation;
+    }
+
+    public Set<Ship> getShips() {
+        return ships;
+    }
+
+    public void setShips(Set<Ship> ships) {
+        this.ships = ships;
+    }
+
+    public void addShip(Ship ship){
+        ship.setGamePlayers(this);
+        ships.add(ship);
     }
 
 }
