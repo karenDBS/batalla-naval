@@ -1,8 +1,12 @@
 package com.codemasters.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 import java.util.*;
 
@@ -54,10 +58,6 @@ public class Player {
 
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
-    }
-
-    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
-        this.gamePlayers = gamePlayers;
     }
 
     public void addGamePlayer(GamePlayer game){

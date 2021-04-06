@@ -1,5 +1,6 @@
 package com.codemasters.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,6 +49,7 @@ public class Game {
     public long getId() {
         return id;
     }
+
 
     public void addGamePlayer(GamePlayer player){
         player.setGame(this);
