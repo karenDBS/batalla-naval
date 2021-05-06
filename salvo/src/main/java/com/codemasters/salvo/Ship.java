@@ -22,7 +22,7 @@ public class Ship {
 
     @ElementCollection
     @Column(name="location")
-    private List<String> location = new ArrayList<>();
+    private List<String> locations = new ArrayList<>();
 
     public Ship() {
     }
@@ -30,7 +30,7 @@ public class Ship {
     public Ship(String type, GamePlayer gamePlayers, List<String> location) {
         this.type = type;
         this.gamePlayers = gamePlayers;
-        this.location = location;
+        this.locations = location;
     }
 
     public long getId() {
@@ -45,12 +45,12 @@ public class Ship {
         this.type = type;
     }
 
-    public List<String> getLocation() {
-        return location;
+    public List<String> getLocations() {
+        return locations;
     }
 
-    public void setLocation(List<String> location) {
-        this.location = location;
+    public void setLocations(List<String> locations) {
+        this.locations = locations;
     }
 
     public void setId(long id) {

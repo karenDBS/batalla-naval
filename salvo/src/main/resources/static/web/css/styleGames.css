@@ -1,0 +1,51 @@
+body{
+    background-image: url(../img/battlenaval.jpg);
+    background-repeat:no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+#register, #logout{
+    background-color: rgb(53, 53, 53);
+    padding-top: 1%;
+    border-bottom:1px solid white;
+}
+
+#login-form{
+    margin-left: 10%;
+}
+
+#logout{
+    padding-bottom: 1%;
+}
+
+#buttonLogout{
+    margin-left: 10%;
+}
+
+h1{
+    color: white;
+    margin-top: 5%;
+}
+
+.contenedor{
+    margin-top: 5%;
+}
+
+table{
+    margin-right: 50%;
+}
+
+table th{
+    border: 2px solid white;
+}
+
+table tbody td{
+    border: 2px solid white;
+    width: 100px;
+    height: 50px;
+}
+
+li, th , td , p, h5{
+    color: white;
+}

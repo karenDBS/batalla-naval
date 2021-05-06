@@ -1,5 +1,6 @@
 package com.codemasters.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,18 +19,25 @@ public class Player {
 
     private String userName;
 
-    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers = new HashSet<>();
+
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    private Set<Score> scores = new HashSet<>();
+
+    private String password;
 
     public Player() {
     }
 
-    public Player(String userName) {
+    public Player(String userName, String password) {
         this.userName = userName;
+        this.password = password;
     }
 
+    @JsonIgnore
     public List<Game> getGames() {
-        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
+        return gamePlayers.stream().map(GamePlayer::getGame).collect(toList());
     }
 
     public void setGames(Set<GamePlayer> games) {
@@ -48,10 +56,6 @@ public class Player {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
@@ -60,7 +64,32 @@ public class Player {
         this.gamePlayers = gamePlayers;
     }
 
-    public void addGamePlayer(GamePlayer game){
+    public Set<Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(Set<Score> scores) {
+        this.scores = scores;
+    }
+
+    public Optional<Score> getScore(Game game) {
+        return getScores().stream().filter(p -> p.getGame().equals(game)).findFirst();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void addScore(Score score) {
+        score.setPlayer(this);
+        scores.add(score);
+    }
+
+    public void addGamePlayer(GamePlayer game) {
         game.setPlayer(this);
         gamePlayers.add(game);
     }

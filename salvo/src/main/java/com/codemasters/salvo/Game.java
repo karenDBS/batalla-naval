@@ -1,5 +1,6 @@
 package com.codemasters.salvo;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +27,9 @@ public class Game {
     @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     Set<GamePlayer> gamePlayers = new HashSet<>();
 
+    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    Set<Score> scores = new HashSet<>();
+
     public Game() {
     }
 
@@ -33,6 +37,7 @@ public class Game {
         this.dateOfCreate = dateOfCreate;
     }
 
+    @JsonIgnore
     public List<Player> getPlayers() {
         return gamePlayers.stream().map(GamePlayer::getPlayer).collect(toList());
     }
@@ -47,6 +52,19 @@ public class Game {
 
     public long getId() {
         return id;
+    }
+
+    public Set<Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(Set<Score> scores) {
+        this.scores = scores;
+    }
+
+    public void addScores(Score score){
+        score.setGame(this);
+        scores.add(score);
     }
 
     public void addGamePlayer(GamePlayer player){

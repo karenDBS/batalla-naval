@@ -1,0 +1,53 @@
+body{
+    background-image:url(../img/fondoGame.jpg);
+    background-repeat:no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.messageError{
+    margin-top:12%;
+}
+
+table{
+    margin-top: 5%;
+}
+
+table th{
+    color:white;
+    text-align: center;
+}
+
+.borde td{
+    border:2px solid white;
+    height: 55px;
+    color:white;
+    text-align: center;
+}
+
+.celdas{
+    border:2px solid white;
+    width: 100px;
+    height: 50px;
+}
+
+.colorBarcos{
+    background-color: rgb(64, 160, 216);
+}
+
+.colorSalvoes{
+    background-color: rgb(170, 7, 7);
+}
+
+.colorTiroAcertado{
+    background-image: url(../img/Barco.jpg);
+    background-size:cover;
+}
+
+.newColorShips{
+    background-color: red;
+}
+
+.colorHover{
+    background-color: rgba(253, 60, 60, 0.411);
+}
