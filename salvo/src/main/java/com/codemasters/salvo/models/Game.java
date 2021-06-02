@@ -1,4 +1,4 @@
-package com.codemasters.salvo;
+package com.codemasters.salvo.models;
 
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;

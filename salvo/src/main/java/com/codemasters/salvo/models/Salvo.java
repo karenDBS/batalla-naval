@@ -1,10 +1,11 @@
-package com.codemasters.salvo;
+package com.codemasters.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Salvo {
@@ -60,4 +61,37 @@ public class Salvo {
     public void setLocations(List<String> locations) {
         this.locations = locations;
     }
+
+    public List<String> getHits() {
+
+        Optional<GamePlayer> opponent = gamePlayer.gamePlayerOpponent();
+        List<String> locations = new ArrayList<>();
+
+        if (opponent.isPresent()) {
+
+            List<String> shipsOpponent = opponent.get().getShips().stream().flatMap(ship -> ship.getLocations().stream()).collect(toList());
+            locations = shipsOpponent.stream().filter(this.locations::contains).collect(toList());
+
+        }
+
+        return locations;
+    }
+
+    public List<Ship> getSunks(){
+
+        List<Ship> shipsSunks = new ArrayList<>();
+        Optional<GamePlayer> opponent = gamePlayer.gamePlayerOpponent();
+        if (opponent.isPresent()) {
+
+            List<String> acertados = gamePlayer.getSalvoes().stream().filter(salvo-> salvo.turnPlayer <= this.turnPlayer).flatMap(salvo-> salvo.getHits().stream()).collect(toList());
+            shipsSunks = opponent.get().getShips().stream().filter(ship -> acertados.containsAll(ship.getLocations())).collect(toList());
+
+        }
+
+        return shipsSunks;
+    }
+
+
 }
+
+

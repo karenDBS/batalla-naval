@@ -1,26 +1,92 @@
 body{
-    background-image: url(../img/battlenaval.jpg);
+    background-image: url(../img/bu.jpg);
     background-repeat:no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
     background-attachment: fixed;
 }
 
-#register, #logout{
-    background-color: rgb(53, 53, 53);
+.title{ 
+    font-family: 'Orbitron', sans-serif;
+    margin-top: 2%;
+}
+
+.boton{
+    margin-top: 2%;
+    margin-left: 3%;
+}
+
+.overlay{
+    background-color: rgba(0, 0, 0,.4);
+    position:fixed;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    visibility: hidden;
+}
+
+.overlay.active{
+    visibility: visible;
+}
+
+.popUp{
+    background-image: url(../img/backgroundPopUp.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 2px solid rgba(0, 0, 0, 0.226);
+    border-radius: 7px;
     padding-top: 1%;
-    border-bottom:1px solid white;
+    padding-bottom: 3%;
+    margin-bottom: 29%;
+    width: 25%;
+    opacity: 0;
+    transition: 0.3s ease all;
+    transform: scale(0.7);
 }
 
-#login-form{
-    margin-left: 10%;
+.popUp.active{
+    opacity: 1;
+    transform: scale(1);
 }
 
-#logout{
-    padding-bottom: 1%;
+#cerrar{
+    width: 7%;
+    height: 7%;
+    margin-left: 85%;
+    padding-bottom: 0%;
+}
+
+#cerrar:hover{
+    opacity: 0.7;
+}
+
+.login{
+    margin-right: 5%;
+}
+
+.message{
+    padding-bottom: 2%;
+}
+
+.player{
+    font-family: 'Orbitron', sans-serif;
 }
 
 #buttonLogout{
-    margin-left: 10%;
+    margin-left: 3%;
+    margin-top: 2%;
+}
+
+#buttonCreate{
+    margin-left: 83%;
+    margin-top: 2%;
+    padding-bottom: 0.5%;
+    background-color: rgb(61, 197, 61);
+}
+
+#buttonCreate:hover{
+    background-color: rgb(48, 151, 48);
 }
 
 h1{
@@ -32,18 +98,32 @@ h1{
     margin-top: 5%;
 }
 
+#gamesContainer{
+    width:47%;
+    border:2px solid white;
+    background-color: rgb(32, 32, 34);
+    font-family: 'Orbitron', sans-serif;
+}
+
+#list{
+    margin-left: 5%;
+}
+
 table{
     margin-right: 50%;
 }
 
 table th{
     border: 2px solid white;
+    text-align: center;
 }
 
 table tbody td{
     border: 2px solid white;
     width: 100px;
     height: 50px;
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
 }
 
 li, th , td , p, h5{

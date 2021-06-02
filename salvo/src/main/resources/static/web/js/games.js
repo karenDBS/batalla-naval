@@ -18,7 +18,7 @@ var app = new Vue({
           players: [],
           username: "",
           password: "",
-          url: "http://localhost:8080/web/game.html?gp="
+          url: "/web/game.html?gp="
      },
      methods: {
           sumScores: function (email) {
@@ -115,7 +115,7 @@ var app = new Vue({
                          location.reload()
                     })
                     .fail(function () {
-                         alert("If you do not have an account, register by pressing Sing In or check the password or username you entered");
+                         document.getElementById("errorTexto").textContent = "If you do not have an account, register by pressing Sing In or check the password or username you entered";
                     })
           },
           createUser: function () {
@@ -123,7 +123,7 @@ var app = new Vue({
                     function () {
                          app.login();
                     }).fail(function () {
-                         alert("Error when trying to register, this account already exists")
+                         document.getElementById("errorTexto").textContent = "Error when trying to register, this account already exists";
                     })
           },
           logout: function () {
@@ -143,9 +143,15 @@ var app = new Vue({
                }).fail(function () {
                     alert("Error:The game is full");
                })
+          },
+          mostrarForm: function () {
+               document.getElementById("overlay").classList.add("active");
+               document.getElementById("popUp").classList.add("active");
+          },
+          cerrarPopUp: function () {
+               document.getElementById("overlay").classList.remove("active");
+               document.getElementById("popUp").classList.remove("active");
           }
 
      }
 })
-
-

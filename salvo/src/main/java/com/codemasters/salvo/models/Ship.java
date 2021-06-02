@@ -1,4 +1,4 @@
-package com.codemasters.salvo;
+package com.codemasters.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
 

@@ -1,5 +1,7 @@
 package com.codemasters.salvo;
 
+import com.codemasters.salvo.models.*;
+import com.codemasters.salvo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -36,7 +38,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 	private PasswordEncoder passwordEncoder;
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository repository,GameRepository repositoryGame, GamePlayerRepository repositoryGamePlayer, ShipRepository repositoryShip, SalvoRepository repositorySalvo, ScoreRepository scoreRepository) {
+	public CommandLineRunner initData(PlayerRepository repository, GameRepository repositoryGame, GamePlayerRepository repositoryGamePlayer, ShipRepository repositoryShip, SalvoRepository repositorySalvo, ScoreRepository scoreRepository) {
 		return (args) -> {
 
 
@@ -78,8 +80,6 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			repositoryGamePlayer.save(gamePlayerCinco);
 			repositoryGamePlayer.save(gamePlayerSeis);
 			repositoryGamePlayer.save(gamePlayerSiete);
-
-
 
 			Ship shipUno = new Ship("Submarine", gamePlayerUno, List.of("F1", "G1", "H1"));
 			Ship shipDos = new Ship("Carrier", gamePlayerUno, List.of("I4","I5","I6","I7"));

@@ -1,4 +1,4 @@
-package com.codemasters.salvo;
+package com.codemasters.salvo.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -74,4 +74,5 @@ public class Score {
     public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
     }
+
 }

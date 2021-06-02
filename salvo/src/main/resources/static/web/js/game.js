@@ -2,24 +2,17 @@
 const urlParams = new URLSearchParams(window.location.search);
 const getGamePlayer = urlParams.get('gp');
 
-fetch("http://localhost:8080/api/game_view/" + getGamePlayer)
-     .then(function (response) {
-          if (response.ok) {
-               return response.json();
-          }
-     }).then(function (json) {
-          app.gameView = json;
-          app.colorearCasilla();
-          app.playersName();
-          app.pintarSalvos();
-          app.tiroAcertado();
-     })
-
 var app = new Vue({
      el: "#app",
      data: {
+          status: "",
           clicks: 0,
-          ship: "battleship",
+          detalle: "",
+          ship: "Battleship",
+          salvo: {
+               "turnPlayer": 0,
+               "locations": []
+          },
           numeros: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           letras: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
           gameView: {},
@@ -29,31 +22,31 @@ var app = new Vue({
           },
           ships: [
                {
-                    "type": "battleship",
+                    "type": "Battleship",
                     "locations": [],
                     "size": 4
                },
                {
-                    "type": "carrier",
+                    "type": "Carrier",
                     "locations": [],
-                    "size": 4
+                    "size": 5
                },
                {
-                    "type": "destroyer",
+                    "type": "Destroyer",
                     "locations": [],
                     "size": 3
                },
                {
-                    "type": "patrolBoat",
+                    "type": "PatrolBoat",
                     "locations": [],
                     "size": 2
                },
                {
-                    "type": "submarine",
+                    "type": "Submarine",
                     "locations": [],
                     "size": 3
                },
-          ]
+          ],
 
      },
      methods: {
@@ -65,18 +58,17 @@ var app = new Vue({
                     app.players.playerB = app.gameView.gamePlayers.find(element => element.id != getGamePlayer).player;
                }
           },
-          colorearCasilla: function () {
-
+          paintShips: function () {
                var barco = app.gameView.ships;
 
                for (let j = 0; j < barco.length; j++) {
                     for (let i = 0; i < barco[j].locations.length; i++) {
-                         document.getElementById(barco[j].locations[i]).className = "colorBarcos";
+                         document.getElementById(barco[j].locations[i]).className = "colorShips";
                     }
                }
 
           },
-          pintarSalvos: function () {
+          paintSalvos: function () {
                var salvoJugador = app.gameView.salvoes.filter(element => element.player == app.players.playerA.id);
                var oponente = app.gameView.salvoes.filter(element => element.player == app.players.playerB.id);
 
@@ -95,7 +87,7 @@ var app = new Vue({
                }
 
           },
-          tiroAcertado: function () {
+          successfulShot: function () {
 
                var oponente = app.gameView.salvoes.filter(element => element.player == app.players.playerB.id);
 
@@ -114,106 +106,272 @@ var app = new Vue({
                }
           },
           crearShips: function () {
-               $.post({
-                    url: "/api/games/players/" + getGamePlayer + "/ships",
-                    data: JSON.stringify([
-                         { "type": app.ships[0].type, "locations": app.ships[0].locations },
-                         { "type": app.ships[1].type, "locations": app.ships[1].locations },
-                         { "type": app.ships[2].type, "locations": app.ships[2].locations },
-                         { "type": app.ships[3].type, "locations": app.ships[3].locations },
-                         { "type": app.ships[4].type, "locations": app.ships[4].locations }
-                    ]),
-                    dataType: "text",
-                    contentType: "application/json"
-               })
-                    .done(function (response, status, jqXHR) {
-                         console.log("Ship added: " + response);
-                         location.reload();
+
+               if (app.ships[0].locations.length != 0 && app.ships[1].locations.length != 0 && app.ships[2].locations.length != 0 && app.ships[3].locations.length != 0 && app.ships[4].locations.length != 0) {
+
+                    $.post({
+                         url: "/api/games/players/" + getGamePlayer + "/ships",
+                         data: JSON.stringify(app.ships),
+                         dataType: "text",
+                         contentType: "application/json"
                     })
-                    .fail(function (jqXHR, status, httpError) {
-                         console.log("Failed to add ships: " + status + " " + httpError);
-                    })
+                         .done(function (response, status, jqXHR) {
+                              console.log("Ship added: " + response);
+                              location.reload();
+                         })
+                         .fail(function (jqXHR, status, httpError) {
+                              console.log("Failed to add ships: " + jqXHR.status + " " + JSON.parse(jqXHR.responseText).Error);
+                         })
+
+               } else {
+                    alert("You must locate all the ships to save them");
+               }
           },
           locationShip: function (letr, number) {
 
                this.clicks++;
 
-               var shipSelect;
-
-               app.ships.forEach(ship => {
-                    if (ship.type == app.ship) {
-                         shipSelect = ship;
-                    }
-               })
+               var shipSelect = app.ships.find(ship => ship.type == app.ship);
 
                var letra = app.letras.indexOf(letr);
                var numero = app.numeros.indexOf(number);
                var j = 0;
 
-               shipSelect.locations.forEach(location => {
+               if (!app.overheated(shipSelect)) {
+                    if (app.detalle == "vertical") {
+                         shipSelect.locations.forEach((location, index) => {
+                              if (document.getElementById('k' + location).className == shipSelect.type + "-" + index + "v") {
+                                   document.getElementById('k' + location).classList.remove(shipSelect.type + "-" + index + "v");
+                              }
 
-                    if (!sobreencimado(shipSelect)) {
-                         if (document.getElementById("t"+location).className == "newColorShips") {
-                              document.getElementById("t"+location).classList.remove("newColorShips");
-                         }
+                         })
+                    } else if (app.detalle == "horizontal") {
+                         shipSelect.locations.forEach((location, index) => {
+                              if (document.getElementById('k' + location).className == shipSelect.type + "-" + index) {
+                                   document.getElementById('k' + location).classList.remove(shipSelect.type + "-" + index);
+                              }
+                         })
                     }
-               })
 
-               if (this.clicks % 2 == 1) {
-                    if (letra + shipSelect.size > 10) {
-                         shipSelect.locations = [];
+                    if (this.clicks % 2 == 1) {
+                         if (letra + shipSelect.size > 10) {
+                              shipSelect.locations = [];
 
-                         for (j; j < shipSelect.size; j++) {
-                              shipSelect.locations.push(app.letras[letra - j] + app.numeros[numero]);
+                              document.getElementById("text").textContent = "no hay espacio para mover el barco en esa direccion"
+                         } else {
+                              shipSelect.locations = [];
+                              for (j; j < shipSelect.size; j++) {
+                                   shipSelect.locations.push(app.letras[letra + j] + app.numeros[numero]);
+                              }
+                         }
+                         app.detalle = "vertical";
+
+                    } else {
+                         if (numero + shipSelect.size > 10) {
+                              shipSelect.locations = [];
+
+                              document.getElementById("text").textContent = "no hay espacio para mover el barco en esa direccion"
+
+                         } else {
+                              shipSelect.locations = [];
+                              for (j; j < shipSelect.size; j++) {
+                                   shipSelect.locations.push(app.letras[letra] + app.numeros[numero + j]);
+                              }
+                         }
+                         app.detalle = "horizontal";
+                    }
+
+                    if (!app.overheated(shipSelect)) {
+                         if (app.detalle == "vertical") {
+                              shipSelect.locations.forEach((location, index) => {
+                                   document.getElementById('k' + location).className = shipSelect.type + "-" + index + "v";
+                                   document.getElementById("text").textContent = ""
+                              })
+
+                         } else if (app.detalle == "horizontal") {
+                              shipSelect.locations.forEach((location, index) => {
+                                   document.getElementById('k' + location).className = shipSelect.type + "-" + index;
+                                   document.getElementById("text").textContent = ""
+                              })
                          }
                     } else {
-                         shipSelect.locations = [];
-                         for (j; j < shipSelect.size; j++) {
-                              shipSelect.locations.push(app.letras[letra + j] + app.numeros[numero]);
+                         document.getElementById("text").textContent = "there is no space to put the ship"
+                    }
+
+               }
+          },
+          overheated: function (ship) {
+
+               var remainingShips = app.ships.filter(barco => barco.type != ship.type);
+
+               for (let z = 0; z < remainingShips.length; z++) {
+                    for (let a = 0; a < remainingShips[z].locations.length; a++) {
+                         if (ship.locations.includes(remainingShips[z].locations[a])) {
+                              return true;
                          }
                     }
+               }
+
+               return false;
+
+          },
+          salvosVerification: function (letr, number) {
+
+               var salvoCurrent = app.gameView.salvoes.filter(element => element.player == app.players.playerA.id);
+
+               for (let i = 0; i < salvoCurrent.length; i++) {
+                    if (salvoCurrent[i].locations.includes(letr + number)) {
+                         return true;
+                    }
+               }
+
+               return false;
+          },
+          paintNewSalvos: function (letr, number) {
+
+               if (app.gameView.salvoes.length == 0 || app.gameView.state == 'WAITING_YOU_SALVOS') {
+
+                    var index = app.salvo.locations.indexOf(letr + number);
+
+                    if (index == -1) {
+                         if (app.salvo.locations.length < 5) {
+                              if (app.gameView.salvoes != []) {
+
+                                   if (!app.salvosVerification(letr, number)) {
+
+                                        app.salvo.locations.push(letr + number);
+                                        document.getElementById(letr.toLowerCase() + number).className = "newColorSalvos";
+
+                                   } else {
+                                        alert("you can't shoot in a place where it has already been shot")
+                                   }
+                              }
+                         }
+                    } else {
+                         if (app.gameView.salvoes != []) {
+
+                              if (!app.salvosVerification(letr, number)) {
+                                   app.salvo.locations.splice(index, 1);
+                                   document.getElementById(letr.toLowerCase() + number).classList.remove("newColorSalvos");
+
+                              }
+                         }
+                    }
+               }
+
+          },
+          saveSalvos: function () {
+               if (app.salvo.locations.length == 5) {
+                    $.post({
+                         url: "/api/games/players/" + getGamePlayer + "/salvos",
+                         data: JSON.stringify(app.salvo),
+                         dataType: "text",
+                         contentType: "application/json"
+                    })
+                         .done(function (response, status, jqXHR) {
+                              console.log("Salvo added: " + response);
+                              location.reload();
+                         })
+                         .fail(function (jqXHR, status, httpError) {
+                              alert("Failed to add salvo: " + jqXHR.status + " " + JSON.parse(jqXHR.responseText).Error);
+                              app.removeSalvos();
+                         })
 
                } else {
-                    if (numero + shipSelect.size > 10) {
-                         shipSelect.locations = [];
-
-                         for (j; j < shipSelect.size; j++) {
-                              shipSelect.locations.push(app.letras[letra] + app.numeros[numero - j]);
-                         }
-                    } else {
-                         shipSelect.locations = [];
-                         for (j; j < shipSelect.size; j++) {
-                              shipSelect.locations.push(app.letras[letra] + app.numeros[numero + j]);
-                         }
-                    }
+                    alert("You must have 5 shots to save them");
                }
+          },
+          removeSalvos: function () {
+               app.salvo.locations.forEach(location => {
+                    document.getElementById(location.toLowerCase()).classList.remove("newColorSalvos");
+               });
+               app.salvo.locations = [];
+          },
+          increaseTurn: function () {
+               var salvoCurrent = app.gameView.salvoes.filter(element => element.player == app.players.playerA.id);
+               app.salvo.turnPlayer = salvoCurrent.length + 1;
+          },
+          paintOpponentShot: function () {
 
-               if (!sobreencimado(shipSelect)) {
-                    shipSelect.locations.forEach(location => {
-                         document.getElementById("t"+location).className = "newColorShips";
-                         document.getElementById("text").textContent = "" 
+               app.gameView.hits.forEach(hit => {
+                    hit.hits.forEach(location => {
+                         document.getElementById(location.toLowerCase()).className = "colorTiroAcertado";
+                         document.getElementById(location.toLowerCase()).innerHTML = hit.turn;
                     })
-               }else{
-                    document.getElementById("text").textContent = "no hay espacio para poner un barco" 
+               })
+
+          },
+          sunks: function () {
+               app.gameView.hits.forEach(hit => {
+                    hit.sunks.forEach(sunk => {
+                         sunk.locations.forEach(location => {
+                              document.getElementById(location.toLowerCase()).className = "colorSunks";
+                         })
+                    })
+               })
+          },
+          sunksOpponent: function () {
+               if (this.gameView.state != 'WAITING_OPPONENT') {
+                    app.gameView.opponentHits.forEach(hit => {
+                         hit.sunks.forEach(sunk => {
+                              sunk.locations.forEach(location => {
+                                   document.getElementById(location).className = "colorSunks";
+                              })
+                         });
+
+                    })
                }
+          },
+          volver: function () {
+               location.href = "/web/games.html";
+          },
+          changes: function () {
+               var status = {
+                    WAITING_OPPONENT: "Esperando un oponente...",
+                    WAITING_OPPONENT_SHIPS: "Esperando a que el oponente coloque sus barcos...",
+                    WAITING_YOU_SALVOS: "Esperando a que dispares",
+                    WAITING_OPPONENT_SALVOS: "Espera a que el oponente dispare...",
+                    TIE: "Juego empatado!!",
+                    LOSE: "Perdiste :'(",
+                    WIN: "Felicidades ganaste!! :D"
+               }
+
+               app.status = status[app.gameView.state];
+
+               if (app.gameView.state == 'TIE' || app.gameView.state == 'LOSE' || app.gameView.state == 'WIN') {
+                    var title = document.getElementById("titulo");
+                    title.textContent = "Game Over";
+               }
+
+          },
+          reloadGame: function () {
+               if (this.gameView.state.includes('OPPONENT')) {
+                    setTimeout(this.data, 3000);
+               }
+          },
+          data: function () {
+               fetch("/api/game_view/" + getGamePlayer)
+                    .then((response) => {
+                         if (response.ok) {
+                              return response.json();
+                         }
+                    }).then((json)=> {
+                         this.gameView = json;
+                         this.playersName();
+                         this.paintShips();
+                         this.paintSalvos();
+                         this.successfulShot();
+                         this.increaseTurn();
+                         this.paintOpponentShot();
+                         this.sunks();
+                         this.sunksOpponent();
+                         this.changes();
+                         this.reloadGame();
+                    })
+
           }
+     },
+     mounted: function () {
+          this.data();
      }
 });
-
-
-function sobreencimado(ship) {
-
-     var currentShip = app.ships.find(barco => barco.type == ship.type);
-     var remainingShips = app.ships.filter(barco => barco.type != currentShip.type);
-
-     for (let z = 0; z < remainingShips.length; z++) {
-          for (let a = 0; a < remainingShips[z].locations.length; a++) {
-               if (currentShip.locations.includes(remainingShips[z].locations[a])) {
-                    return true;
-               }
-          }
-     }
-
-     return false;
-
-}

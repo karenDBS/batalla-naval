@@ -1,16 +1,45 @@
 body{
-    background-image:url(../img/fondoGame.jpg);
+    background-image:url(../img/mare.gif);
     background-repeat:no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
     background-attachment: fixed;
+}
+
+#contenedor{
+    margin-top: 1%;
+}
+
+#volver{
+    margin-left: 3%;
+}
+
+.titulo{
+    margin-left: 37%;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.players{
+    font-family: 'Squada One', cursive;
+    font-size: 30px;
 }
 
 .messageError{
     margin-top:12%;
 }
 
+#textState{
+    text-shadow:  0.1em 0.1em 0.2em black;
+    font-size: 20px;
+}
+
+.mover{ 
+    margin-left: 40%;
+    font-family: 'Orbitron', sans-serif;
+}
+
 table{
     margin-top: 5%;
+    background-color: rgba(158, 195, 255, 0.582);
 }
 
 table th{
@@ -20,18 +49,22 @@ table th{
 
 .borde td{
     border:2px solid white;
-    height: 55px;
+    height: 53px;
     color:white;
     text-align: center;
 }
 
 .celdas{
     border:2px solid white;
-    width: 100px;
-    height: 50px;
+    width: 250px;
+    height: 60px;
 }
 
-.colorBarcos{
+#myTable{
+    margin-top: 1.7%;
+}
+
+.colorShips{
     background-color: rgb(64, 160, 216);
 }
 
@@ -44,10 +77,215 @@ table th{
     background-size:cover;
 }
 
+.colorSunks{
+    background-image: url(../img/kaboom.png);
+    background-size:cover;
+    opacity: 0.9;
+}
+    
+
 .newColorShips{
     background-color: red;
 }
 
-.colorHover{
-    background-color: rgba(253, 60, 60, 0.411);
+#selectAndSave{
+    margin-top: 2%;
+}
+
+.newColorSalvos{
+    animation: cambio 0.8s linear infinite alternate both;
+    background-image: url(../img/mira.png);
+    background-size: 70% 74%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+@keyframes cambio{
+      0%{
+          background-color: rgb(168, 0, 0);
+        }
+      100%{
+          background-color: rgb(250, 19, 19);
+      }
+}
+
+/*battleship en horizontal*/
+
+.Battleship-0{
+    background-image: url(../img/battleship-1.png);
+}
+
+.Battleship-1{
+    background-image: url(../img/battleship-2.png);
+}
+
+.Battleship-2{
+    background-image: url(../img/battleship-3.png);
+}
+
+.Battleship-3{
+    background-image: url(../img/battleship-4.png);
+}
+
+/*battleship en vertical*/
+
+.Battleship-0v{
+    background-image: url(../img/battleship-1-v.png);
+}
+
+.Battleship-1v{
+    background-image: url(../img/battleship-2-v.png);
+}
+
+.Battleship-2v{
+    background-image: url(../img/battleship-3-v.png);
+}
+
+.Battleship-3v{
+    background-image: url(../img/battleship-4-v.png);
+}
+
+/*carrier en horizontal*/
+
+.Carrier-0{
+    background-image: url(../img/carrier-1.png);
+    background-size: cover;
+}
+
+.Carrier-1{
+    background-image: url(../img/carrier-2.png);
+    background-size: cover;
+}
+
+.Carrier-2{
+    background-image: url(../img/carrier-3.png);
+    background-size: cover;
+}
+
+.Carrier-3{
+    background-image: url(../img/carrier-4.png);
+    background-size: cover;
+}
+
+.Carrier-4{
+    background-image: url(../img/carrier-5.png);
+    background-size: cover;
+}
+
+/*carrier en vertical*/
+
+.Carrier-0v{
+    background-image: url(../img/carrier-1-v.png);
+    background-size: cover;
+}
+
+.Carrier-1v{
+    background-image: url(../img/carrier-2-v.png);
+    background-size: cover;
+}
+
+.Carrier-2v{
+    background-image: url(../img/carrier-3-v.png);
+    background-size: cover;
+}
+
+.Carrier-3v{
+    background-image: url(../img/carrier-4-v.png);
+    background-size: cover;
+}
+
+.Carrier-4v{
+    background-image: url(../img/carrier-5-v.png);
+    background-size: cover;
+}
+
+/*submarine en horizontal*/
+
+.Submarine-0{
+    background-image: url(../img/submarine-1.png);
+}
+
+.Submarine-1{
+    background-image: url(../img/submarine-2.png);
+    background-size: cover;
+}
+
+.Submarine-2{
+    background-image: url(../img/submarine-3.png);
+    background-size: cover;
+}
+
+/*submarine en vertical*/
+
+.Submarine-0v{
+    background-image: url(../img/submarine-1-v.png);
+}
+
+.Submarine-1v{
+    background-image: url(../img/submarine-2-v.png);
+    background-size: cover;
+}
+
+.Submarine-2v{
+    background-image: url(../img/submarine-3-v.png);
+    background-size: cover;
+}
+
+
+/*patrolBoat en horizontal*/
+
+.PatrolBoat-0{
+    background-image: url(../img/patrolBoat-1.png);
+    background-size: cover;
+}
+
+.PatrolBoat-1{
+    background-image: url(../img/patrolBoat-2.png);
+    background-size: cover;
+}
+
+/*patrolBoat en vertical*/
+
+.PatrolBoat-0v{
+    background-image: url(../img/patrolBoat-2\ -\ copia.png);
+    background-size: cover;
+}
+
+.PatrolBoat-1v{
+    background-image: url(../img/patrolBoat-1\ -\ copia.png);
+    background-size: cover;
+}
+
+/*patrolBoat en horizontal*/
+
+.Destroyer-0{
+    background-image: url(../img/destroyer-1.png);
+    background-size: cover;
+}
+
+.Destroyer-1{
+    background-image: url(../img/destroyer-2.png);
+    background-size: cover;
+}
+
+.Destroyer-2{
+    background-image: url(../img/destroyer-3.png);
+    background-size: cover;
+}
+
+/*patrolBoat en vertical*/
+
+.Destroyer-0v{
+    background-image: url(../img/destroyer-3-v.png);
+    background-size: cover;
+}
+
+.Destroyer-1v{
+    background-image: url(../img/destroyer-2-v.png);
+    background-size: cover;
+}
+
+.Destroyer-2v{
+    background-image: url(../img/destroyer-1-v.png);
+    background-size: cover;
 }
