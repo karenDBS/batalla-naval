@@ -42,7 +42,7 @@
         <div class="row" id="logout" v-show="data.player != null">
             <div class="col">
                 <button id="buttonLogout" class="btn btn-danger d-inline" v-on:click="logout"><b>Log Out</b></button>
-                <button id="buttonCreate" class="btn text-light d-inline" v-on:click="createGame"><b>Create
+                <button class="buttonColor btn text-light d-inline" v-on:click="createGame"><b>Create
                         Game</b></button>
             </div>
         </div>
@@ -68,7 +68,7 @@
                                         v-bind:href="url+gamePlayer.id"><button class="btn btn-primary text-light"><b>game
                                     {{game.id}}</b></button></a>
 
-                                    <button class="join btn btn-success text-light" v-if="data.player != null && data.player.id != gamePlayer.player.id &&
+                                    <button id="buttonJoin" class="btn text-light text-center" v-if="data.player != null && data.player.id != gamePlayer.player.id &&
                                      game.gamePlayers.length==1" v-on:click="joinGame(game.id)"><b>join</b></button>
                                 </li>
 

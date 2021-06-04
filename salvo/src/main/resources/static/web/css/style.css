@@ -6,7 +6,7 @@ body{
 }
 
 #contenedor{
-    margin-top: 1%;
+    margin-top: 2%;
 }
 
 #volver{
@@ -14,13 +14,25 @@ body{
 }
 
 .titulo{
-    margin-left: 37%;
     font-family: 'Orbitron', sans-serif;
+}
+
+.imageState{
+    width: 20%;
+    height: 98%;
+    margin-top: -3%;
+    margin-left: -13%;
 }
 
 .players{
     font-family: 'Squada One', cursive;
     font-size: 30px;
+}
+
+.textShips{
+    text-shadow:  0.1em 0.1em 0.2em black;
+    padding-bottom: 1%;
+    font-family: 'Orbitron', sans-serif;
 }
 
 .messageError{
@@ -61,7 +73,11 @@ table th{
 }
 
 #myTable{
-    margin-top: 1.7%;
+    margin-top: -0%;
+}
+
+#tablaSalvos{
+    margin-top: -2%;
 }
 
 .colorShips{
@@ -82,7 +98,6 @@ table th{
     background-size:cover;
     opacity: 0.9;
 }
-    
 
 .newColorShips{
     background-color: red;

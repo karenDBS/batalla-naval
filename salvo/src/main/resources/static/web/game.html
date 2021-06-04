@@ -15,22 +15,39 @@
 
 <body>
     <div class="container-fluid" id="app">
-        <div class="row justify-content-center" id="contenedor">
+        <div class="row justify-content-center" id="contenedor" v-if="gameView != undefined">
             <div class="col">
-                <button id="volver" class="btn btn-danger d-inline" v-if="gameView != undefined"
-                    v-on:click="volver"><b>Volver al Inicio</b></button>
-                <h1 id="titulo" class="titulo text-light text-center  d-inline" v-if="gameView != undefined">Game</h1>
-                <h2 v-show="gameView == undefined" class="messageError text-light text-center">Error: No puedes ingresar
+                <button id="volver" class="btn btn-danger" v-on:click="volver"><b>Volver al Inicio</b></button>
+            </div>
+            <div class="col">
+                <h1 id="titulo" class="titulo text-center text-light">A todo o nada!!</h1>
+            </div>
+            <div class="col">
+                <img v-if="gameView.state == 'WIN'" class="imageState" src="img/win.gif" alt="gif de niña feliz">
+                <img v-if="gameView.state == 'LOSE'" class="imageState" src="img/lose.gif" alt="gif de niña llorando">
+                <img v-if="gameView.state == 'TIE'" class="imageState" src="img/tie-3.gif"
+                    alt="gif de aplauso sarcastico XD">
+            </div>
+            <div class="col-12">
+                <h5 class="players text-light text-center">{{players.playerA.email}}(you)
+                    vs {{players.playerB.email}}</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" v-show="gameView == undefined">
+                <h2 class="messageError text-center text-light">Error: No puedes ingresar
                     a esta pagina!</h2>
-                <h5 class="players text-light text-center" v-if="gameView != undefined">{{players.playerA.email}}(you)
-                    vs
-                    {{players.playerB.email}}</h5>
             </div>
         </div>
 
         <div class="row justify-content-center" id="selectAndSave" v-if="gameView != undefined">
+            <div class="col-12">
+                <h5 v-if="gameView.state == 'WAITING_YOU_SHIPS'" class="textShips text-light text-center">
+                    <b>{{status}}</b>
+                </h5>
+            </div>
             <div class="col-2" v-show="gameView.ships != null && app.gameView.ships.length == 0">
-                <button v-on:click="crearShips()">add ships</button>
+                <button v-on:click="crearShips()" class="btn btn-success"><b>Agregar barcos</b></button>
             </div>
             <div class="col-2" v-show="gameView.ships != null && app.gameView.ships.length == 0">
                 <select name="select" v-model="ship">
@@ -42,6 +59,7 @@
                 </select>
             </div>
         </div>
+
         <div class="row justify-content-center" v-if="gameView != undefined">
             <div class="col-sm-10 col-lg-4" v-show="gameView.ships != null && app.gameView.ships.length == 0">
                 <h5 id="text" class="text-center text-danger"></h5>
@@ -61,7 +79,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-12 col-md-8 col-lg-5" id="myTable"
+            <div class="col-12 col-md-8 col-lg-4" id="myTable"
                 v-show="gameView.ships != null && app.gameView.ships.length != 0">
                 <table>
                     <thead>
@@ -78,9 +96,10 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-12 col-md-8 col-lg-5" id="noTieneSalvos" v-show="gameView.state != 'WAITING_YOU_SHIPS'">
+            <div class="col-12 col-md-8 col-lg-4" id="tablaSalvos" v-show="gameView.state != 'WAITING_YOU_SHIPS'">
                 <div class="row align-items-center">
-                    <div class="col-3" v-if="gameView.salvoes != null && gameView.salvoes.length == 0 || gameView.state == 'WAITING_YOU_SALVOS'">
+                    <div class="col-3"
+                        v-if="gameView.salvoes != null && gameView.salvoes.length == 0 || gameView.state == 'WAITING_YOU_SALVOS'">
                         <button id="saveSalvos" class="btn btn-success" v-on:click="saveSalvos"><b>save
                                 salvos</b></button>
                     </div>
@@ -105,6 +124,7 @@
                 </table>
             </div>
         </div>
+
     </div>
     </div>
 

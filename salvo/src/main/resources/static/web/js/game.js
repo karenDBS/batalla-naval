@@ -153,52 +153,53 @@ var app = new Vue({
                          })
                     }
 
-                    if (this.clicks % 2 == 1) {
-                         if (letra + shipSelect.size > 10) {
-                              shipSelect.locations = [];
-
-                              document.getElementById("text").textContent = "no hay espacio para mover el barco en esa direccion"
-                         } else {
-                              shipSelect.locations = [];
-                              for (j; j < shipSelect.size; j++) {
-                                   shipSelect.locations.push(app.letras[letra + j] + app.numeros[numero]);
-                              }
-                         }
-                         app.detalle = "vertical";
-
-                    } else {
-                         if (numero + shipSelect.size > 10) {
-                              shipSelect.locations = [];
-
-                              document.getElementById("text").textContent = "no hay espacio para mover el barco en esa direccion"
-
-                         } else {
-                              shipSelect.locations = [];
-                              for (j; j < shipSelect.size; j++) {
-                                   shipSelect.locations.push(app.letras[letra] + app.numeros[numero + j]);
-                              }
-                         }
-                         app.detalle = "horizontal";
-                    }
-
-                    if (!app.overheated(shipSelect)) {
-                         if (app.detalle == "vertical") {
-                              shipSelect.locations.forEach((location, index) => {
-                                   document.getElementById('k' + location).className = shipSelect.type + "-" + index + "v";
-                                   document.getElementById("text").textContent = ""
-                              })
-
-                         } else if (app.detalle == "horizontal") {
-                              shipSelect.locations.forEach((location, index) => {
-                                   document.getElementById('k' + location).className = shipSelect.type + "-" + index;
-                                   document.getElementById("text").textContent = ""
-                              })
-                         }
-                    } else {
-                         document.getElementById("text").textContent = "there is no space to put the ship"
-                    }
-
                }
+
+               if (this.clicks % 2 == 1) {
+                    if (letra + shipSelect.size > 10) {
+                         shipSelect.locations = [];
+
+                         document.getElementById("text").textContent = "no hay espacio para mover el barco en esa direccion"
+                    } else {
+                         shipSelect.locations = [];
+                         for (j; j < shipSelect.size; j++) {
+                              shipSelect.locations.push(app.letras[letra + j] + app.numeros[numero]);
+                         }
+                    }
+                    app.detalle = "vertical";
+
+               } else {
+                    if (numero + shipSelect.size > 10) {
+                         shipSelect.locations = [];
+
+                         document.getElementById("text").textContent = "no hay espacio para mover el barco en esa direccion"
+
+                    } else {
+                         shipSelect.locations = [];
+                         for (j; j < shipSelect.size; j++) {
+                              shipSelect.locations.push(app.letras[letra] + app.numeros[numero + j]);
+                         }
+                    }
+                    app.detalle = "horizontal";
+               }
+
+               if (!app.overheated(shipSelect)) {
+                    if (app.detalle == "vertical") {
+                         shipSelect.locations.forEach((location, index) => {
+                              document.getElementById('k' + location).className = shipSelect.type + "-" + index + "v";
+                              document.getElementById("text").textContent = ""
+                         })
+
+                    } else if (app.detalle == "horizontal") {
+                         shipSelect.locations.forEach((location, index) => {
+                              document.getElementById('k' + location).className = shipSelect.type + "-" + index;
+                              document.getElementById("text").textContent = ""
+                         })
+                    }
+               } else {
+                    document.getElementById("text").textContent = "there is no space to put the ship"
+               }
+
           },
           overheated: function (ship) {
 
@@ -311,7 +312,7 @@ var app = new Vue({
                })
           },
           sunksOpponent: function () {
-               if (this.gameView.state != 'WAITING_OPPONENT') {
+               if (this.gameView.gamePlayers.length > 1) {
                     app.gameView.opponentHits.forEach(hit => {
                          hit.sunks.forEach(sunk => {
                               sunk.locations.forEach(location => {
@@ -325,23 +326,35 @@ var app = new Vue({
           volver: function () {
                location.href = "/web/games.html";
           },
+          statusMessage: function () {
+               var title = document.getElementById("titulo");
+               switch (app.gameView.state) {
+                    case 'WIN':
+                         title.textContent = "GANASTE!!";
+                         break;
+                    case 'LOSE':
+                         title.textContent = "Perdiste wey";
+                         break;
+                    case 'TIE':
+                         title.textContent = "Empataroon";
+                         break;
+                    default:
+                         break;
+               }
+          },
           changes: function () {
                var status = {
                     WAITING_OPPONENT: "Esperando un oponente...",
                     WAITING_OPPONENT_SHIPS: "Esperando a que el oponente coloque sus barcos...",
-                    WAITING_YOU_SALVOS: "Esperando a que dispares",
                     WAITING_OPPONENT_SALVOS: "Espera a que el oponente dispare...",
-                    TIE: "Juego empatado!!",
-                    LOSE: "Perdiste :'(",
-                    WIN: "Felicidades ganaste!! :D"
+                    WAITING_YOU_SHIPS: "Selecciona tus barcos para iniciar :)",
+                    WAITING_YOU_SALVOS: "Esperando a que dispares",
+                    TIE: "Han empatado este juego!!",
+                    LOSE: "Perdiste, mejor suerte para la proxima!",
+                    WIN: "Felicidades ganaste esta partida!! :D"
                }
 
                app.status = status[app.gameView.state];
-
-               if (app.gameView.state == 'TIE' || app.gameView.state == 'LOSE' || app.gameView.state == 'WIN') {
-                    var title = document.getElementById("titulo");
-                    title.textContent = "Game Over";
-               }
 
           },
           reloadGame: function () {
@@ -355,7 +368,7 @@ var app = new Vue({
                          if (response.ok) {
                               return response.json();
                          }
-                    }).then((json)=> {
+                    }).then((json) => {
                          this.gameView = json;
                          this.playersName();
                          this.paintShips();
@@ -366,6 +379,7 @@ var app = new Vue({
                          this.sunks();
                          this.sunksOpponent();
                          this.changes();
+                         this.statusMessage();
                          this.reloadGame();
                     })
 
