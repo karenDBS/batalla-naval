@@ -41,8 +41,10 @@
 
         <div class="row" id="logout" v-show="data.player != null">
             <div class="col">
-                <button id="buttonLogout" class="btn btn-danger d-inline" v-on:click="logout"><b>Log Out</b></button>
-                <button class="buttonColor btn text-light d-inline" v-on:click="createGame"><b>Create
+                <button id="buttonLogout" class="btn btn-danger" v-on:click="logout"><b>Log Out</b></button>
+                </div>
+                <div class="col">
+                <button class="buttonColor btn text-light" v-on:click="createGame"><b>Create
                         Game</b></button>
             </div>
         </div>
